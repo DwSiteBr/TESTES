@@ -1,311 +1,199 @@
-<!DOCTYPE html>
+<!doctype html>
+
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Sentinel Facilities — Home</title>
-  <meta name="description" content="Sentinel Facilities: Zeladoria, Portaria, Limpeza e Conservação, Vigilância Patrimonial e Segurança Eletrônica." />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Pesquisa de Validação — Completa</title>
   <style>
-    :root{
-      --bg:#0b0b0b;--card:#111;--muted:#cfcfcf;--text:#f5f5f5;--brand:#7c3aed;--brand-2:#22d3ee;--accent:#10b981;--border:#262626;
-    }
+    :root{--bg:#0b0b0b;--card:#111;--muted:#9aa0a6;--accent:#00d4ff;--glass:rgba(255,255,255,0.03)}
     *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,Helvetica,sans-serif;
-      background:var(--bg); color:var(--text);
-    }
-    a{color:inherit; text-decoration:none}
-    img{max-width:100%; display:block}
-    .container{width:min(1200px, 92vw); margin:0 auto}
-
-    /* Header */
-    header{position:sticky; top:0; z-index:50; background:linear-gradient(180deg, rgba(0,0,0,.75), rgba(0,0,0,.3) 80%, transparent)}
-    .topbar{
-      margin:12px auto; border:1px solid var(--border); border-radius:18px;
-      backdrop-filter:saturate(1.2) blur(6px); background:rgba(18,18,18,.85);
-      display:flex; align-items:center; justify-content:space-between; padding:10px 14px;
-    }
-    .brand{display:flex; align-items:center; gap:10px}
-    .brand img{height:48px; width:auto}
-    .brand strong{font-weight:800; letter-spacing:.5px}
-    .menu-btn{
-      border:1px solid var(--border); background:#161616; color:var(--text);
-      padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:600; display:inline-flex; align-items:center; gap:8px;
-    }
-    .menu-btn:active{transform:translateY(1px)}
-
-    /* SLIDER */
-    .slider {
-      position: relative;
-      overflow: hidden;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      margin: 16px auto 28px;
-      max-width: 100%;
-      aspect-ratio: 16/9; /* Proporção tipo YouTube */
-      background:#000;
-    }
-    .slides {
-      display: flex;
-      transition: transform 0.6s ease;
-      height: 100%;
-    }
-    .slides img {
-      flex: 1 0 100%;
-      object-fit: cover;
-      height: 100%;
-    }
-    .nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0,0,0,.5);
-      color: #fff;
-      border: none;
-      font-size: 1.5rem;
-      padding: 6px 10px;
-      cursor: pointer;
-      border-radius: 6px;
-    }
-    .nav.prev { left: 10px; }
-    .nav.next { right: 10px; }
-    .nav:hover { background: rgba(0,0,0,.7); }
-
-    /* Sections */
-    section{padding:28px 0}
-    .section-card{border:1px solid var(--border); border-radius:14px; background:var(--card); padding:18px}
-    h2{margin:0 0 8px 0; font-size: clamp(1.2rem, 2.5vw, 1.6rem)}
-    p{color:var(--muted); line-height:1.6}
-
-    /* Grid de serviços */
-    .grid{display:grid; gap:16px}
-    .grid.cards{grid-template-columns: repeat( auto-fit, minmax(230px,1fr) )}
-    .card{
-      border:1px solid var(--border); border-radius:14px; overflow:hidden; background:#0f0f0f; display:flex; flex-direction:column
-    }
-    .card img {
-      aspect-ratio: 16/9;
-      object-fit: cover;
-    }
-    .card .content{padding:12px 14px; display:flex; flex-direction:column; gap:8px}
-    .btn{display:inline-flex; align-items:center; justify-content:center; gap:8px;
-      border:1px solid var(--border); padding:10px 12px; border-radius:12px; font-weight:700; cursor:pointer; background:#161616; color:var(--text)}
-    .btn:hover{filter:brightness(1.06)}
-    .btn.brand{background:linear-gradient(90deg, var(--brand), var(--brand-2)); border-color:transparent}
-
-    /* CTA */
-    .cta{
-      display:grid; gap:18px; align-items:center;
-      grid-template-columns: 1.2fr .8fr;
-      border:1px solid var(--border); border-radius:14px; padding:18px; background:radial-gradient(1200px 200px at 10% -20%, rgba(124,58,237,.2), transparent 60%), var(--card);
-    }
-    .cta h3{margin:0; font-size: clamp(1.25rem, 3vw, 1.8rem)}
-    .cta-legend{color:var(--muted)}
-    .cta-media{border-radius:10px; overflow:hidden; border:1px solid var(--border)}
-    .cta-media img{display:block; width:100%; height:auto; object-fit:cover}
-    @media (max-width: 820px){
-      .cta{grid-template-columns: 1fr}
-    }
-
-    /* Botão fixo WhatsApp */
-    .floating{position:fixed; right:14px; bottom:14px; z-index:70;}
-    .floating .btn{box-shadow:0 10px 30px rgba(0,0,0,.5); background:#25d366; border-color:#1ebe5b; color:#fff}
-
-    /* Footer */
-    footer{padding:28px 0 80px}
-    .footer-grid{display:grid; gap:18px; grid-template-columns: 1.4fr 1fr 1fr}
-    .footer-card{background:#0f0f0f; border:1px solid var(--border); border-radius:14px; padding:18px}
-    .socials{display:flex; gap:10px; flex-wrap:wrap}
-    .socials a img{height:24px; width:24px}
-    .minitext{font-size:.9rem; color:#bdbdbd}
-    .copy{margin-top:16px; font-size:.85rem; color:#a8a8a8}
-    @media (max-width: 960px){
-      .footer-grid{grid-template-columns: 1fr}
-    }
-
-    /* Drawer */
-    .drawer{position:fixed; inset:0; display:none; z-index:100}
-    .drawer.active{display:block}
-    .drawer .backdrop{position:absolute; inset:0; background:rgba(0,0,0,.6)}
-    .drawer .panel{
-      position:absolute; right:0; top:0; bottom:0; width:min(420px, 88vw);
-      background:#0f0f0f; border-left:1px solid var(--border); padding:18px; overflow:auto
-    }
-    .drawer .panel h4{margin:0 0 10px 0}
-    .nav-list{display:grid; gap:8px}
-    .nav-list a{padding:12px 14px; border:1px solid var(--border); border-radius:12px; background:#121212; font-weight:600}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;color:#e6eef3;background:linear-gradient(180deg,var(--bg),#050507)}
+    .wrap{max-width:860px;margin:28px auto;padding:18px}
+    header{display:flex;gap:12px;align-items:center}
+    .logo{width:52px;height:52px;border-radius:10px;background:linear-gradient(135deg,var(--accent),#7b61ff);display:flex;align-items:center;justify-content:center;font-weight:700;color:#021}
+    h1{margin:0;font-size:20px}
+    p.lead{color:var(--muted);margin:6px 0 18px}
+    .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 18px rgba(0,0,0,0.6);margin-top:12px}
+    label{display:block;margin-bottom:6px;font-weight:600}
+    input[type=text],input[type=number],textarea,select{width:100%;padding:10px;border-radius:8px;border:none;background:#0b0b0b;color:#e6eef3;outline:1px solid rgba(255,255,255,0.05);margin-bottom:10px}
+    .btn{background:var(--glass);border:1px solid rgba(255,255,255,0.08);padding:8px 14px;border-radius:10px;cursor:pointer;color:#e6eef3}
+    .btn.primary{background:linear-gradient(90deg,var(--accent),#7b61ff);color:#021;border:none}
+    .small{font-size:13px;color:var(--muted)}
+    #relatorio{display:none;margin-top:14px}
+    .bar{height:12px;background:#060608;border-radius:8px;overflow:hidden;margin-bottom:6px}
+    .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#7b61ff)}
+    ul{list-style-type:none;padding:0}
+    ul li{padding:8px 0;border-bottom:1px solid #1a1a1a}
+    ul li:last-child{border-bottom:none}
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <header>
-    <div class="container topbar">
-      <div class="brand">
-        <img src="logo.png" alt="Logo Sentinel Facilities" />
-        <strong>Sentinel Facilities</strong>
+  <div class="wrap">
+    <header>
+      <div class="logo">PV</div>
+      <div>
+        <h1>Pesquisa de Validação</h1>
+        <p class="lead">Formulário completo com todas as perguntas.</p>
       </div>
-      <button class="menu-btn" id="openMenu">☰ Menu</button>
-    </div>
-  </header>
+    </header>
+    <main class="card">
+      <form id="form">
+        <label for="nome">Nome</label>
+        <input type="text" id="nome" required placeholder="Seu nome" />
 
-  <main class="container" id="conteudo">
-    <!-- SLIDER -->
-    <div class="slider" id="slider">
-      <div class="slides">
-        <img src="portaria.jpg" alt="Portaria 24h">
-        <img src="limpeza.jpg" alt="Limpeza e Conservação">
-        <img src="zeladoria.jpg" alt="Zeladoria e Apoio">
-      </div>
-      <button class="nav prev">❮</button>
-      <button class="nav next">❯</button>
-    </div>
+        <label for="idade">Idade</label>
+        <input type="number" id="idade" required placeholder="Sua idade" min="10" max="120" />
 
-    <!-- Serviços -->
-    <section>
-      <div class="section-card">
-        <h2>Nossos Serviços</h2>
-        <p>Atendimento humano, próximo e eficiente, projetado para as necessidades reais do seu condomínio e da sua empresa.</p>
-      </div>
-    </section>
+        <label for="sexo">Sexo</label>
+        <select id="sexo" required>
+          <option value="">Escolha...</option>
+          <option>Masculino</option>
+          <option>Feminino</option>
+          <option>Não informar</option>
+        </select>
 
-    <!-- Cards -->
-    <section>
-      <div class="grid cards">
-        <article class="card">
-          <img src="zeladoria.jpg" alt="Zeladoria">
-          <div class="content">
-            <h3>Zeladoria</h3>
-            <p class="minitext">Organização e suporte constante.</p>
-            <a class="btn" href="zeladoria.html">Saiba mais</a>
-          </div>
-        </article>
+        <label for="servico">1. Qual tipo de serviço você costuma contratar?</label>
+        <select id="servico" required>
+          <option value="">Escolha...</option>
+          <option>Reparos/Manutenção</option>
+          <option>Limpeza/Serviços Domésticos</option>
+          <option>Tecnologia/Design</option>
+          <option>Consultoria/Mentoria</option>
+          <option>Transporte/Logística</option>
+          <option>Outro</option>
+        </select>
+        <input type="text" id="servico_outro" placeholder="Se 'Outro', escreva aqui" style="display:none" />
 
-        <article class="card">
-          <img src="portaria.jpg" alt="Portaria 24h">
-          <div class="content">
-            <h3>Portaria 24h</h3>
-            <p class="minitext">Controle de acesso com tecnologia.</p>
-            <a class="btn" href="portaria.html">Saiba mais</a>
-          </div>
-        </article>
+        <label for="criterio">2. O que mais pesa na sua decisão?</label>
+        <select id="criterio" required>
+          <option value="">Escolha...</option>
+          <option>Preço</option>
+          <option>Qualidade do trabalho</option>
+          <option>Agilidade (Prazo/Rapidez)</option>
+          <option>Atendimento/Suporte</option>
+          <option>Outros</option>
+        </select>
+        <input type="text" id="criterio_outro" placeholder="Se 'Outros', escreva aqui" style="display:none" />
 
-        <article class="card">
-          <img src="limpeza.jpg" alt="Limpeza">
-          <div class="content">
-            <h3>Limpeza</h3>
-            <p class="minitext">Ambientes impecáveis.</p>
-            <a class="btn" href="limpeza.html">Saiba mais</a>
-          </div>
-        </article>
-      </div>
-    </section>
+        <label for="dificuldade">3. Qual a principal dificuldade que você já teve?</label>
+        <select id="dificuldade" required>
+          <option value="">Escolha...</option>
+          <option>O profissional não cumpriu o combinado</option>
+          <option>Preço muito alto</option>
+          <option>Falta de comunicação</option>
+          <option>Outros</option>
+        </select>
+        <input type="text" id="dificuldade_outro" placeholder="Se 'Outros', escreva aqui" style="display:none" />
 
-    <!-- CTA -->
-    <section>
-      <div class="cta">
-        <div>
-          <h3>Temos a solução completa<br>para o seu condomínio</h3>
-          <p class="cta-legend">Segurança, limpeza, portaria, vigilância e mais.</p>
-          <a class="btn brand" href="https://desenvolvedorawellington.github.io/SENTINEL-facilite/" target="_blank">
-            <img src="whatsapp.png" alt="WhatsApp" style="height:20px;width:20px"> Falar agora
-          </a>
-        </div>
-        <div class="cta-media">
-          <img src="equipe.png" alt="Equipe Sentinel" />
-        </div>
-      </div>
-    </section>
-  </main>
+        <label for="acompanhamento">4. Como você prefere acompanhar o andamento do serviço?</label>
+        <select id="acompanhamento" required>
+          <option value="">Escolha...</option>
+          <option>Acompanhando pessoalmente</option>
+          <option>Recebendo atualizações do profissional</option>
+          <option>Não acompanho, confio no profissional</option>
+          <option>Outros</option>
+        </select>
+        <input type="text" id="acompanhamento_outro" placeholder="Se 'Outros', escreva aqui" style="display:none" />
 
-  <!-- Botão fixo WhatsApp -->
-  <div class="floating">
-    <a class="btn" href="https://desenvolvedorawellington.github.io/SENTINEL-facilite/" target="_blank">
-      <img src="whatsapp.png" alt="WhatsApp" style="height:20px;width:20px"> Atendimento Virtual 
-    </a>
+        <label for="ambiental">5. O fator ambiental é importante para você?</label>
+        <select id="ambiental" required>
+          <option value="">Escolha...</option>
+          <option>Sim, prefiro profissionais ecológicos</option>
+          <option>Um pouco, mas não é decisivo</option>
+          <option>Não, não considero esse fator</option>
+        </select>
+
+        <label for="suporte">6. O suporte após o serviço é importante para você?</label>
+        <select id="suporte" required>
+          <option value="">Escolha...</option>
+          <option>Muito importante</option>
+          <option>Mais ou menos importante</option>
+          <option>Pouco importante</option>
+          <option>Outros</option>
+        </select>
+        <input type="text" id="suporte_outro" placeholder="Se 'Outros', escreva aqui" style="display:none" />
+
+        <label for="recomenda">7. Você recomendaria um bom profissional?</label>
+        <select id="recomenda" required>
+          <option value="">Escolha...</option>
+          <option>Sim</option>
+          <option>Talvez</option>
+          <option>Não</option>
+        </select>
+
+        <button class="btn primary" type="submit">Salvar resposta</button>
+      </form>
+    </main>
   </div>
-
-  <!-- Footer -->
-  <footer>
-    <div class="container footer-grid">
-      <div class="footer-card">
-        <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px">
-          <img src="logo.png" alt="Logo" style="height:40px">
-          <strong>Sentinel Facilities</strong>
-        </div>
-        <div class="socials">
-          <a href="#"><img src="instagram.png" alt="Instagram"></a>
-          <a href="#"><img src="facebook.png" alt="Facebook"></a>
-          <a href="#"><img src="whatsapp1.png" alt="WhatsApp"></a>
-        </div>
-        <div class="copy">©2025 Grupo Sentinel — texto para enderedeo taal </div>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Drawer -->
-  <div class="drawer" id="menuDrawer">
-    <div class="backdrop" data-close></div>
-    <div class="panel">
-      <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px">
-        <h4 id="menuTitle">Menu</h4>
-        <button class="btn" data-close>✕</button>
-      </div>
-      <nav class="nav-list">
-        <a href="index.html">Home</a>
-        <a href="zeladoria.html">Zeladoria</a>
-        <a href="portaria.html">Portaria 24h</a>
-        <a href="limpeza.html">Limpeza e Conservação</a>
-        <a href="vigilancia.html">Vigilância Patrimonial</a>
-        <a href="seguranca-eletronica.html">Segurança Eletrônica</a>
-        <a href="contato.html">Contato</a>
-      </nav>
-    </div>
-  </div>
-
   <script>
-    // Menu drawer
-    const drawer = document.getElementById('menuDrawer');
-    const openBtn = document.getElementById('openMenu');
-    function closeDrawer(){drawer.classList.remove('active');}
-    function openDrawer(){drawer.classList.add('active');}
-    openBtn.addEventListener('click', openDrawer);
-    drawer.addEventListener('click', (e)=>{
-      if(e.target.matches('[data-close]') || e.target === drawer.querySelector('.backdrop')) closeDrawer();
-    });
+    // Configurações do seu projeto Supabase
+    const SUPABASE_URL = 'https://ztztpaawgkoykyhryycr.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0enRwYWF3Z2tveWt5aHJ5eWNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgwNzU1MjksImV4cCI6MjA3MzY1MTUyOX0.OSaUaTkBSq5soALiDwDXqAwiGs4Afwg13QpPTlQWOv4';
 
-    // Slider
-    const slider = document.getElementById('slider');
-    const slidesEl = slider.querySelector('.slides');
-    const totalSlides = slidesEl.children.length;
-    const prevBtn = slider.querySelector('.prev');
-    const nextBtn = slider.querySelector('.next');
+    // Inicializa o Supabase
+    const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    let index = 0;
-    let autoPlay = setInterval(nextSlide, 4000); // troca a cada 4s
+    const el = id => document.getElementById(id);
 
-    function showSlide(i){
-      index = (i + totalSlides) % totalSlides;
-      slidesEl.style.transform = `translateX(-${index * 100}%)`;
+    function toggleInput(selectId, inputId) {
+        el(selectId).addEventListener('change', e => {
+            el(inputId).style.display = e.target.value === 'Outro' || e.target.value === 'Outros' ? 'block' : 'none';
+        });
     }
-    function nextSlide(){ showSlide(index + 1); }
-    function prevSlide(){ showSlide(index - 1); }
 
-    nextBtn.addEventListener('click', ()=>{
-      nextSlide();
-      resetAuto();
-    });
-    prevBtn.addEventListener('click', ()=>{
-      prevSlide();
-      resetAuto();
-    });
+    toggleInput('servico', 'servico_outro');
+    toggleInput('criterio', 'criterio_outro');
+    toggleInput('dificuldade', 'dificuldade_outro');
+    toggleInput('acompanhamento', 'acompanhamento_outro');
+    toggleInput('suporte', 'suporte_outro');
 
-    function resetAuto(){
-      clearInterval(autoPlay);
-      autoPlay = setInterval(nextSlide, 4000);
-    }
+    el('form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const getVal = (selectId, inputId) => {
+        const val = el(selectId).value;
+        const otherVal = el(inputId).value.trim();
+        return (val === 'Outro' || val === 'Outros') ? (otherVal || 'Outros') : val;
+      };
+
+      const dados = {
+        nome: el('nome').value.trim(),
+        idade: parseInt(el('idade').value),
+        sexo: el('sexo').value,
+        servico: getVal('servico', 'servico_outro'),
+        criterio: getVal('criterio', 'criterio_outro'),
+        dificuldade: getVal('dificuldade', 'dificuldade_outro'),
+        acompanhamento: getVal('acompanhamento', 'acompanhamento_outro'),
+        ambiental: el('ambiental').value,
+        suporte: getVal('suporte', 'suporte_outro'),
+        recomenda: el('recomenda').value
+      };
+
+      try {
+        // Salva os dados na tabela 'respostas'
+        const { error } = await supabase
+          .from('respostas')
+          .insert([dados]);
+
+        if (error) {
+            console.error("Erro ao salvar a resposta: ", error);
+            alert("Ocorreu um erro ao salvar a resposta.");
+        } else {
+            alert('Resposta salva com sucesso!');
+            e.target.reset();
+            el('servico_outro').style.display='none';
+            el('criterio_outro').style.display='none';
+            el('dificuldade_outro').style.display='none';
+            el('acompanhamento_outro').style.display='none';
+            el('suporte_outro').style.display='none';
+        }
+      } catch (error) {
+        console.error("Erro ao salvar a resposta: ", error);
+        alert("Ocorreu um erro ao salvar a resposta.");
+      }
+    });
   </script>
 </body>
 </html>
