@@ -1,5 +1,4 @@
 <!doctype html>
-
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8" />
@@ -20,14 +19,11 @@
     .btn{background:var(--glass);border:1px solid rgba(255,255,255,0.08);padding:8px 14px;border-radius:10px;cursor:pointer;color:#e6eef3}
     .btn.primary{background:linear-gradient(90deg,var(--accent),#7b61ff);color:#021;border:none}
     .small{font-size:13px;color:var(--muted)}
-    #relatorio{display:none;margin-top:14px}
-    .bar{height:12px;background:#060608;border-radius:8px;overflow:hidden;margin-bottom:6px}
-    .bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#7b61ff)}
-    ul{list-style-type:none;padding:0}
-    ul li{padding:8px 0;border-bottom:1px solid #1a1a1a}
-    ul li:last-child{border-bottom:none}
+    #relatorio{margin-top:24px}
+    canvas{background:#111;border-radius:12px;margin-top:12px}
   </style>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="wrap">
@@ -38,6 +34,7 @@
         <p class="lead">Formulário completo com todas as perguntas.</p>
       </div>
     </header>
+
     <main class="card">
       <form id="form">
         <label for="nome">Nome</label>
@@ -126,13 +123,18 @@
         <button class="btn primary" type="submit">Salvar resposta</button>
       </form>
     </main>
+
+    <div id="relatorio" class="card">
+      <h2>Relatório de Respostas</h2>
+      <canvas id="graficoServico" height="150"></canvas>
+      <canvas id="graficoCriterio" height="150"></canvas>
+      <canvas id="graficoDificuldade" height="150"></canvas>
+    </div>
   </div>
+
   <script>
-    // Configurações do seu projeto Supabase
     const SUPABASE_URL = 'https://ztztpaawgkoykyhryycr.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp0enRwYWF3Z2tveWt5aHJ5eWNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTgwNzU1MjksImV4cCI6MjA3MzY1MTUyOX0.OSaUaTkBSq5soALiDwDXqAwiGs4Afwg13QpPTlQWOv4';
-
-    // Inicializa o Supabase
     const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const el = id => document.getElementById(id);
@@ -149,15 +151,84 @@
     toggleInput('acompanhamento', 'acompanhamento_outro');
     toggleInput('suporte', 'suporte_outro');
 
-    el('form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      const getVal = (selectId, inputId) => {
-        const val = el(selectId).value;
-        const otherVal = el(inputId).value.trim();
-        return (val === 'Outro' || val === 'Outros') ? (otherVal || 'Outros') : val;
-      };
+    const getVal = (selectId, inputId) => {
+      const val = el(selectId).value;
+      const otherVal = el(inputId).value.trim();
+      return (val === 'Outro' || val === 'Outros') ? (otherVal || 'Outros') : val;
+    };
 
+    async function fetchDados() {
+      const { data, error } = await supabase.from('respostas').select('*');
+      if (error) { console.error(error); return []; }
+      return data;
+    }
+
+    function contarRespostas(dados, campo) {
+      return dados.reduce((acc, item) => {
+        const key = item[campo] || 'Não informado';
+        acc[key] = (acc[key] || 0) + 1;
+        return acc;
+      }, {});
+    }
+
+    function criarGrafico(ctx, labels, values, title) {
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: title,
+            data: values,
+            backgroundColor: 'rgba(0, 212, 255, 0.6)',
+            borderColor: '#00d4ff',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: { beginAtZero: true, ticks: { stepSize: 1 } }
+          }
+        }
+      });
+    }
+
+    async function atualizarRelatorio() {
+      const dados = await fetchDados();
+      if(dados.length === 0) return;
+      el('relatorio').style.display = 'block';
+
+      // Serviço
+      const servicoCount = contarRespostas(dados, 'servico');
+      criarGrafico(
+        el('graficoServico'),
+        Object.keys(servicoCount),
+        Object.values(servicoCount),
+        'Tipo de Serviço'
+      );
+
+      // Critério
+      const criterioCount = contarRespostas(dados, 'criterio');
+      criarGrafico(
+        el('graficoCriterio'),
+        Object.keys(criterioCount),
+        Object.values(criterioCount),
+        'Critério de Decisão'
+      );
+
+      // Dificuldade
+      const dificuldadeCount = contarRespostas(dados, 'dificuldade');
+      criarGrafico(
+        el('graficoDificuldade'),
+        Object.keys(dificuldadeCount),
+        Object.values(dificuldadeCount),
+        'Principais Dificuldades'
+      );
+    }
+
+    el('form').addEventListener('submit', async e => {
+      e.preventDefault();
       const dados = {
         nome: el('nome').value.trim(),
         idade: parseInt(el('idade').value),
@@ -171,29 +242,17 @@
         recomenda: el('recomenda').value
       };
 
-      try {
-        // Salva os dados na tabela 'respostas'
-        const { error } = await supabase
-          .from('respostas')
-          .insert([dados]);
+      const { error } = await supabase.from('respostas').insert([dados]);
+      if(error) { alert('Erro ao salvar resposta'); console.error(error); return; }
 
-        if (error) {
-            console.error("Erro ao salvar a resposta: ", error);
-            alert("Ocorreu um erro ao salvar a resposta.");
-        } else {
-            alert('Resposta salva com sucesso!');
-            e.target.reset();
-            el('servico_outro').style.display='none';
-            el('criterio_outro').style.display='none';
-            el('dificuldade_outro').style.display='none';
-            el('acompanhamento_outro').style.display='none';
-            el('suporte_outro').style.display='none';
-        }
-      } catch (error) {
-        console.error("Erro ao salvar a resposta: ", error);
-        alert("Ocorreu um erro ao salvar a resposta.");
-      }
+      alert('Resposta salva com sucesso!');
+      e.target.reset();
+      ['servico_outro','criterio_outro','dificuldade_outro','acompanhamento_outro','suporte_outro'].forEach(id => el(id).style.display='none');
+      atualizarRelatorio();
     });
+
+    // Carrega o relatório ao abrir a página
+    atualizarRelatorio();
   </script>
 </body>
 </html>
